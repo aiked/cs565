@@ -1,3 +1,62 @@
-\section*{DAML \& OIL}
+\section*{DAML-S}
 
-\subsection{DAML}
+\subsection*{Introduction}
+The target is to find ways and technologies that will enable us to describe, simulate, automatically compose, test and verify Web service compositions.
+For this to work it is necessary to have a way to describe these Semantic Web services. We come to the conclusion that we are in need of a semantic markup language able to describe the content and the capabilities of these web services. The state of the art include languages like OWL we mentioned before. We are going to focus on the DARPA agent markup language (DAML). After the creation of DAML+OIL we improved and created DAML-S. DAML-S is markup language based on DAML+OIL that was created to specifically describe services. Correspondingly, as DAML was replaced with OWL, so DAML-S was also superseded by OWL-S.
+
+\subsection*{DAML+OIL}
+DAML+OIL is an AI-inspired description logic-based language for describing taxonomic information. The DAML+OIL is based on top of XML and RDF(S), both defined in the Semantic Web standards. Essentially it is a language with well-defined semantics and a set of language constructs. These include classes, subclasses and properties with domains and ranges. All these can be used to describe a Web domain.
+
+\subsection*{DAML-S}
+DAML-S is DAML+OIL ontology for Web services. It is also developed under the auspices of the DAML program. There are few different releases as expected. The DAML-S ontology is able to describe a set of classes and properties, specific to the description of Web services.
+It is separated in parts, the upper ontology of DAML-S is created by a service profiler used for describing service advertisements, another process model to enable the description of actual programs that execute each service and a service grounding for describing the transport-level messaging information associated with the actual execution of the program.
+
+\subsection*{DAML-S Examples}
+DAML-S process model is able to describe two different types of processes, \emph{atomic} and \emph{composite}. Also it allows the creation a type of \emph{simple} process, which is a description of a view or abstraction of a atomic or composite process to which expands.
+
+\begin{lstlisting}
+<daml:Classrdf:ID="Process">
+        <daml:unionOfrdf:parseType="daml:collection">
+        <daml:Classrdf:about="#AtomicProcess"/>
+        <daml:Classrdf:about="#SimpleProcess"/>
+        <daml:Classrdf:about="#CompositeProcess"/>
+    </daml:unionOf>
+</daml:Class>
+\end{lstlisting}
+
+An atomic process is a non-decomposable Web-accessible program. It is executed in a single http
+call and returns a response. An example of a atomic process is the {\tt LocateBook} that either
+returns information about the book or nothing.
+\begin{lstlisting}
+<daml:Classrdf:ID="LocateBook"> 
+    <rdfs:subClassOf rdf:resource="&process;#AtomicProcess"/>
+</daml:Class>
+\end{lstlisting}
+
+On the other hand a composite process is composed of other composite or atomic processes. These
+composing processes are connected using control constructs, such as \emph{sequence, if-then-else,
+while, fork etc}. An example of a composite process is the {\tt Find-n-Buy} service that contains
+the LocateBook along with some other services. 
+
+\begin{lstlisting}
+<daml:Classrdf:ID="CompositeProcess">
+    <daml:intersectionOf rdf:parseType="daml:collection"> 
+	<daml:Classrdf:about="#Process"/> 
+	    <daml:Restrictiondaml:minCardinality="1"> 
+		<daml:onPropertyrdf:resource="#composedOf"/> 
+	    </daml:Restriction>
+    </daml:intersectionOf>
+</daml:Class>
+\end{lstlisting}
+
+Also, each process is able to has a set of properties, called parameters and can be either be input
+or output. In the case of the LocateBook an input parameter might be something like the name of the
+book.
+
+\begin{lstlisting}
+<rdf:Propertyrdf:ID="bookName"> 
+    <rdfs:subPropertyOf rdf:resource="&process;#input"/>
+    <rdfs:domainrdf:resource="#LocateBook"/>
+    <rdfs:rangerdf:resource="&xsd;#string"/>2 
+</rdf:Property>
+\end{lstlisting}
