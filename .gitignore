@@ -1,0 +1,6 @@
+# Latex related
+*.aux
+*.log
+
+# Binary
+.pdf
