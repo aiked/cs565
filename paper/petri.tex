@@ -55,24 +55,27 @@ Following we provide some examples on how several types of Distributed OPEration
     \label{fig:Conditional effects and outputs}
 \end{figure}
 
+\textbf{Split Construct} A split composite process is consisted by several sub-processes that are being run concurrently. It simulates the usage of threads in a computer system. For the reasons of this simulation models we do not assume any other standards about how the actual processes are executed. There are any more specifications about waiting times, actual synchronization between the sub-processes due to limitation by this specific model of DAML-S. In order to solve this problem we create new constructs to facilitate the synchronization aspects. The Figure below shows how the two sub-processes work. When both processes are finished a transition fires and we are ready to end the Split(P1, P2) process.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.9\columnwidth]{seq-split.eps}
-    \caption{The sequence construct}
+    \caption{The Split construct}
     \label{fig:Conditional effects and outputs}
 \end{figure}
 
-\begin{figure}[h]
+\textbf{Split and Join Construct} A Split and Join composite process consists of a number of processes being executed concurrently. This requires a state like a Synchronize in order for all the processes to finalize and be ready to end. This means that there is partial synchronization between the processes but the composite process can end only if all the sub-processes have been done. Regardless, this enables an optimization of sub-processes running together if they are not depended in each other. This can been shown from the below figure, the Process 1 and 2 are being executed when they are able. After the finalization of execution of both processes we arrive at a state of Synchronization that enables us to finish the process.
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.9\columnwidth]{seq-split-join.eps}
-    \caption{The sequence construct}
+    \caption{The Split and Join construct}
     \label{fig:Conditional effects and outputs}
 \end{figure}
 
+\textbf{Choice Construct} A Choice composite processes consists of a number of sub-processes. When the time of execution comes a decision is taken and the process chooses a sub-process to execute. The chosen sub-process takes as a parameter a choice bag and is obligated to return another chosen bag. The cardinality of the bag can be expressed by the restriction of Choose(n) where n is (0 $<$ n $<$ $|bag|$). DAML-S is limited in this way and is not able to separate each choice from the other alternatives from the bag of choices. As shown in the figure below Process 1 and 2 are both in the bag of choices. The DAML-S specification corresponds to both as both are being viable and valid possible choices. The selection and the execution of one of the sub-processes allows the model to transition to a state of Done(Choose) regardless the actual choices. This allows the finish of the choice construct composite process.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.9\columnwidth]{seq-choice.eps}
-    \caption{The sequence construct}
+    \caption{The Choice construct}
     \label{fig:Conditional effects and outputs}
 \end{figure}
 
